@@ -1,5 +1,9 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:food_recipie/model.dart';
+import 'package:http/http.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -7,7 +11,27 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<RecipieModel> recipeList=<RecipieModel>[];
   TextEditingController searchController = new TextEditingController();
+
+  getRecipie(String query) async{
+    String url="https://api.edamam.com/search?q=$query&app_id=38fb29b1&app_key=8ca6d4935583df3405fe601d9eb114e1&from=0&to=3&calories=591-722&health=alcohol-free";
+    Response response=await get(Uri.parse(url));
+    Map data=jsonDecode(response.body);
+    log(data.toString());
+
+    data["hits"].forEach((element){
+      RecipieModel recipieModel= new RecipieModel();
+      recipieModel=RecipieModel.fromMap(element["recipe"])
+    })
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getRecipie("Ladoo");
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,9 +71,7 @@ class _HomeState extends State<Home> {
                           {
                             print("Blank search");
                           }else{
-                            Navigator.pushReplacementNamed(context, "/loading",arguments: {
-                              "searchText" : searchController.text,
-                            });
+                            getRecipie(searchController.text);
                           }
 
                         },
