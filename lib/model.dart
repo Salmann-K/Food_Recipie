@@ -1,9 +1,19 @@
-class RecipieModel{
+class RecipeModel
+{
   late String applabel;
-  late String appimgurl;
-  late double appCalories;
+  late String appimgUrl;
+  late double appcalories;
   late String appurl;
 
-  RecipieModel({this.applabel="LABEL",this.appCalories=0.0000,this.appimgurl="IMAGE",this.appurl="URL"});
-
+  RecipeModel({this.applabel = "LABEL",this.appcalories = 0.000 ,this.appimgUrl = "IMAGE",this.appurl = "URL"});
+  factory RecipeModel.fromMap(Map recipe)
+  {
+    return RecipeModel(
+        applabel: recipe["label"],
+        appcalories: recipe["calories"],
+        appimgUrl: recipe["image"],
+        appurl: recipe["url"]
+    );
+  }
 }
+

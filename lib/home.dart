@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:food_recipie/model.dart';
 import 'package:http/http.dart';
@@ -11,26 +10,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<RecipieModel> recipeList=<RecipieModel>[];
+  List<RecipeModel> recipeList =  <RecipeModel>[];
   TextEditingController searchController = new TextEditingController();
 
-  getRecipie(String query) async{
-    String url="https://api.edamam.com/search?q=$query&app_id=38fb29b1&app_key=8ca6d4935583df3405fe601d9eb114e1&from=0&to=3&calories=591-722&health=alcohol-free";
-    Response response=await get(Uri.parse(url));
-    Map data=jsonDecode(response.body);
-    log(data.toString());
+  getRecipes(String query) async
+  {
+    String url = "https://api.edamam.com/search?q=$query&app_id=ebb6041c&app_key=3c33ad913ab23b8554082bfb5fdd78b5";
+    Response response = await get(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+
 
     data["hits"].forEach((element){
-      RecipieModel recipieModel= new RecipieModel();
-      recipieModel=RecipieModel.fromMap(element["recipe"])
-    })
-  }
+      RecipeModel recipeModel = new RecipeModel();
+      recipeModel = RecipeModel.fromMap(element["recipe"]);
+      recipeList.add(recipeModel);
+      log(recipeList.toString());
+    });
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getRecipie("Ladoo");
+    recipeList.forEach((Recipe) {
+      print(Recipe.applabel);
+      print(Recipe.appcalories);
+    });
+
   }
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,7 @@ class _HomeState extends State<Home> {
                           {
                             print("Blank search");
                           }else{
-                            getRecipie(searchController.text);
+                            getRecipes(searchController.text);
                           }
 
                         },
@@ -94,7 +95,6 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
