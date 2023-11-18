@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:food_recipie/Search.dart';
 import 'package:food_recipie/model.dart';
+import 'package:food_recipie/recipeView.dart';
 import 'package:http/http.dart';
 
 class Home extends StatefulWidget {
@@ -14,7 +16,7 @@ class _HomeState extends State<Home> {
   bool isLoading = true;
   List<RecipeModel> recipeList = <RecipeModel>[];
   TextEditingController searchController = new TextEditingController();
-  List recipCatList=[{"imgUrl" : "https://images.unsplash.com/photo-1593560704563-f176a2eb61db", "heading": "Chilli Food"},{"imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db", "heading": "Sweet Dish"},{"imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db", "heading": "Chilli Food"},{"imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db", "heading": "Chilli Food"}];
+  List recipCatList=[{"imgUrl" : "https://images.unsplash.com/photo-1593560704563-f176a2eb61db", "heading": "Mexican"},{"imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db", "heading": "American"},{"imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db", "heading": "Chinese"},{"imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db", "heading": "Indian"}];
 
   getRecipes(String query) async {
     String url =
@@ -82,7 +84,7 @@ class _HomeState extends State<Home> {
                                   "") {
                                 print("Blank search");
                               } else {
-                                getRecipes(searchController.text);
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> Search(searchController.text)));
                               }
                             },
                             child: Container(
@@ -133,7 +135,9 @@ class _HomeState extends State<Home> {
                         itemCount: recipeList.length,
                         itemBuilder: (context, index) {
                           return InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> RecipeView(recipeList[index].appurl)));
+                            },
                             child: Card(
                               margin: EdgeInsets.all(20),
                               shape: RoundedRectangleBorder(
@@ -204,7 +208,9 @@ class _HomeState extends State<Home> {
 
                          return Container(
                            child: InkWell(
-                             onTap: () {} ,
+                             onTap: () {
+                               Navigator.push(context, MaterialPageRoute(builder: (context)=> Search(recipCatList[index]["heading"])));
+                             } ,
                              child: Card(
                                margin: EdgeInsets.all(20),
                                shape: RoundedRectangleBorder(
